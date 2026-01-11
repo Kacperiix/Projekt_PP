@@ -25,13 +25,15 @@ int main(int argc, char* argv[]) {
             while(getchar() != '\n'); 
             wybor = 0; 
         }
+        
+        while(getchar() != '\n');
 
         switch (wybor) {
             case 1:
-                printf("--- Tu bedzie dodawanie ---\n");
+                dodajBohatera(); 
                 break;
             case 2:
-                printf("--- Tu bedzie wyswietlanie ---\n");
+                wyswietlListe();
                 break;
             case 3:
                 printf("--- Tu bedzie usuwanie ---\n");

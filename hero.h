@@ -23,4 +23,7 @@ typedef struct ElementListy {
     struct ElementListy* nastepny; 
 } ElementListy;
 
+void dodajBohatera();
+void wyswietlListe();
+
 #endif
