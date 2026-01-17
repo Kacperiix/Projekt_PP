@@ -105,3 +105,65 @@ void wyswietlListe() {
     }
     printf("\n");
 }
+
+void usunBohatera() {
+    // 1. Sprawdzenie, czy lista jest pusta
+    if (glowa == NULL) {
+        printf("Rejestr jest pusty, nikogo nie mozna usunac.\n");
+        return;
+    }
+
+    // 2. Pobranie imienia do usunięcia
+    char szukaneImie[101];
+    printf("Podaj imie bohatera do usuniecia: ");
+    scanf("%100s", szukaneImie);
+    wyczyscBufor();
+
+    // 3. Specjalny przypadek: Usuwanie PIERWSZEGO elementu
+    // strcmp(a, b) == 0 oznacza, że napisy są identyczne
+    if (strcmp(glowa->dane.imie, szukaneImie) == 0) {
+        
+        // Sprawdzenie statusu czy jest na misji
+        if (glowa->dane.status == NA_MISJI) {
+            printf("BLAD: Nie mozna usunac bohatera '%s' - jest NA MISJI!\n", szukaneImie);
+            return;
+        }
+
+        // Zapamiętujemy adres starej głowy, żeby ją skasować
+        ElementListy* doUsuniecia = glowa;
+        // Nową głową zostaje drugi element
+        glowa = glowa->nastepny;
+        
+        free(doUsuniecia); // Zwolnienie pamięci RAM
+        printf("Bohater usuniety pomyslnie.\n");
+        return;
+    }
+
+    // 4. Przypadek ogólny: Szukanie w reszcie listy
+    // Potrzebujemy dwóch wskaźników: "obecny" i "poprzedni"
+    ElementListy* obecny = glowa->nastepny;
+    ElementListy* poprzedni = glowa;
+
+    while (obecny != NULL) {
+        if (strcmp(obecny->dane.imie, szukaneImie) == 0) {
+            // Sprawdzamy status
+            if (obecny->dane.status == NA_MISJI) {
+                printf("BLAD: Nie mozna usunac bohatera '%s' - jest NA MISJI!\n", szukaneImie);
+                return;
+            }
+
+            // Przepinamy wskaźniki (omijamy usuwany element)
+            poprzedni->nastepny = obecny->nastepny;
+            
+            free(obecny); // Usuwamy element z pamięci
+            printf("Bohater usuniety pomyslnie.\n");
+            return;
+        }
+
+        poprzedni = obecny;
+        obecny = obecny->nastepny;
+    }
+
+    // 5. Jeśli pętla się skończyła i nic nie znaleźliśmy
+    printf("Nie znaleziono bohatera o imieniu: %s\n", szukaneImie);
+}

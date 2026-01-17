@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
                 wyswietlListe();
                 break;
             case 3:
-                printf("--- Tu bedzie usuwanie ---\n");
+                usunBohatera();
                 break;
             case 4:
                 printf("Konczenie pracy...\n");

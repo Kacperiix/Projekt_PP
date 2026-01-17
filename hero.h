@@ -25,5 +25,6 @@ typedef struct ElementListy {
 
 void dodajBohatera();
 void wyswietlListe();
+void usunBohatera();
 
 #endif
