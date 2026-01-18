@@ -11,6 +11,8 @@ int main(int argc, char* argv[]) {
     char* nazwaPliku = argv[1];
     printf("Uruchomiono system Gildii. Plik danych: %s\n", nazwaPliku);
 
+    wczytajZPliku(nazwaPliku);
+
     int wybor;
     do {
         printf("\n=== REJESTR BOHATEROW GILDII ===\n");
@@ -39,6 +41,8 @@ int main(int argc, char* argv[]) {
                 usunBohatera();
                 break;
             case 4:
+                printf("Zapisywanie zmian do pliku...\n");
+                zapiszDoPliku(nazwaPliku);
                 printf("Konczenie pracy...\n");
                 break;
             default:

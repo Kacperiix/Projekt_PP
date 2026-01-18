@@ -167,3 +167,94 @@ void usunBohatera() {
     // 5. Jeśli pętla się skończyła i nic nie znaleźliśmy
     printf("Nie znaleziono bohatera o imieniu: %s\n", szukaneImie);
 }
+
+// --- OBSŁUGA PLIKÓW ---
+
+void zapiszDoPliku(const char* nazwaPliku) {
+    // 1. Otwarcie pliku w trybie write
+    // Ten tryb kasuje starą zawartość pliku i wpisuje nową
+    FILE* plik = fopen(nazwaPliku, "w");
+    
+    if (plik == NULL) {
+        printf("BLAD: Nie udalo sie otworzyc pliku do zapisu!\n");
+        return;
+    }
+
+    // 2. Przejście przez całą listę
+    ElementListy* temp = glowa;
+    while (temp != NULL) {
+        // fprintf wysyła tekst do pliku
+        fprintf(plik, "%s %s %s %d %d %d\n",
+            temp->dane.imie,
+            temp->dane.rasa,
+            temp->dane.klasa,
+            temp->dane.poziom,
+            temp->dane.reputacja,
+            (int)temp->dane.status
+        );
+        
+        temp = temp->nastepny;
+    }
+
+    // 3. Zamknięcie pliku
+    fclose(plik);
+    printf("Dane zostaly zapisane do pliku '%s'.\n", nazwaPliku);
+}
+
+void wczytajZPliku(const char* nazwaPliku) {
+    // 1. Otwarcie pliku w trybie read
+    FILE* plik = fopen(nazwaPliku, "r");
+    
+    if (plik == NULL) {
+        printf("Plik '%s' nie istnieje. Zostanie utworzony przy zapisie.\n", nazwaPliku);
+        return;
+    }
+
+    printf("Wczytywanie danych...\n");
+
+    // 2. Pętla nieskończona
+    while (1) {
+        // Rezerwujemy pamięć na nowego bohatera
+        ElementListy* nowy = (ElementListy*)malloc(sizeof(ElementListy));
+        
+        if (nowy == NULL) break; 
+
+        int statusInt; // Zmienna pomocnicza do wczytania statusu
+
+        // fscanf próbuje pobrać 6 wartości z pliku
+        // Zwraca liczbę poprawnie wczytanych elementów
+        int wynik = fscanf(plik, "%s %s %s %d %d %d",
+            nowy->dane.imie,
+            nowy->dane.rasa,
+            nowy->dane.klasa,
+            &nowy->dane.poziom,
+            &nowy->dane.reputacja,
+            &statusInt
+        );
+
+        // 3. Sprawdzenie czy to koniec pliku
+        if (wynik != 6) {
+            // Jeśli fscanf nie znalazł 6 elementów to znaczy że plik się skończył
+            free(nowy);
+            break;     
+        }
+
+        // Przypisanie wczytanych danych
+        nowy->dane.status = (StatusBohatera)statusInt;
+        nowy->nastepny = NULL;
+
+        // 4. Dodanie wczytanego bohatera na koniec listy
+        if (glowa == NULL) {
+            glowa = nowy;
+        } else {
+            ElementListy* temp = glowa;
+            while (temp->nastepny != NULL) {
+                temp = temp->nastepny;
+            }
+            temp->nastepny = nowy;
+        }
+    }
+
+    fclose(plik);
+    printf("Wczytano dane z pliku '%s'.\n", nazwaPliku);
+}

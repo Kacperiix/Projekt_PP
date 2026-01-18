@@ -26,5 +26,7 @@ typedef struct ElementListy {
 void dodajBohatera();
 void wyswietlListe();
 void usunBohatera();
+void zapiszDoPliku(const char* nazwaPliku);
+void wczytajZPliku(const char* nazwaPliku);
 
 #endif
