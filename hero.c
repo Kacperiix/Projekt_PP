@@ -258,3 +258,87 @@ void wczytajZPliku(const char* nazwaPliku) {
     fclose(plik);
     printf("Wczytano dane z pliku '%s'.\n", nazwaPliku);
 }
+
+// FUNKCJE POMOCNICZE DO SORTOWANIA
+
+// Funkcja licząca ilu bohaterów mamy obecnie w pamięci
+int liczBohaterow() {
+    int licznik = 0;
+    ElementListy* temp = glowa;
+    while (temp != NULL) {
+        licznik++;
+        temp = temp->nastepny;
+    }
+    return licznik;
+}
+
+// Funkcja pomocnicza do wyświetlania posortowanej tablicy
+void wyswietlTabliceWskaznikow(ElementListy** tab, int n) {
+    if (n == 0) return;
+    printf("\n--- POSORTOWANY REJESTR BOHATEROW ---\n");
+    // Poprawiony nagłówek (dodano status do formatowania)
+    printf("%-20s %-15s %-15s %-7s %-15s\n", "Imie", "Rasa", "Klasa", "Poziom", "Status");
+    printf("---------------------------------------------------------------------------\n");
+    for (int i = 0; i < n; i++) {
+        printf("%-20s %-15s %-15s %-7d %-15s\n",
+            tab[i]->dane.imie, 
+            tab[i]->dane.rasa, 
+            tab[i]->dane.klasa,
+            tab[i]->dane.poziom, 
+            opisyStatusow[tab[i]->dane.status]);
+    }
+}
+
+// GŁÓWNA LOGIKA SORTOWANIA
+
+void sortujPoImieniu() {
+    int n = liczBohaterow();
+    if (n == 0) { printf("Rejestr jest pusty!\n"); return; }
+
+    ElementListy** tab = (ElementListy**)malloc(n * sizeof(ElementListy*));
+    ElementListy* temp = glowa;
+    for (int i = 0; i < n; i++) {
+        tab[i] = temp;
+        temp = temp->nastepny;
+    }
+
+    // Sortowanie bąbelkowe alfabetyczne
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (strcmp(tab[j]->dane.imie, tab[j + 1]->dane.imie) > 0) {
+                ElementListy* swap = tab[j];
+                tab[j] = tab[j + 1];
+                tab[j + 1] = swap;
+            }
+        }
+    }
+
+    wyswietlTabliceWskaznikow(tab, n);
+    free(tab); // Zwalniamy tablicę pomocniczą
+}
+
+void sortujPoPoziomie() {
+    int n = liczBohaterow();
+    if (n == 0) { printf("Rejestr jest pusty!\n"); return; }
+
+    ElementListy** tab = (ElementListy**)malloc(n * sizeof(ElementListy*));
+    ElementListy* temp = glowa;
+    for (int i = 0; i < n; i++) {
+        tab[i] = temp;
+        temp = temp->nastepny;
+    }
+
+    // Sortowanie bąbelkowe po polu liczbowym
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (tab[j]->dane.poziom > tab[j + 1]->dane.poziom) {
+                ElementListy* swap = tab[j];
+                tab[j] = tab[j + 1];
+                tab[j + 1] = swap;
+            }
+        }
+    }
+
+    wyswietlTabliceWskaznikow(tab, n);
+    free(tab);
+}

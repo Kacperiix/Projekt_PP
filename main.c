@@ -19,7 +19,9 @@ int main(int argc, char* argv[]) {
         printf("1. Dodaj bohatera\n");
         printf("2. Wyswietl wszystkich\n");
         printf("3. Usun bohatera\n");
-        printf("4. Wyjscie\n");
+        printf("4. Sortuj alfabetycznie (po imieniu)\n");
+        printf("5. Sortuj liczbowo (po poziomie)\n");
+        printf("6. Wyjscie\n");
         printf("Wybierz opcje: ");
         
         if (scanf("%d", &wybor) != 1) {
@@ -41,6 +43,12 @@ int main(int argc, char* argv[]) {
                 usunBohatera();
                 break;
             case 4:
+                sortujPoImieniu();
+                break;
+            case 5:
+                sortujPoPoziomie();
+                break;
+            case 6:
                 printf("Zapisywanie zmian do pliku...\n");
                 zapiszDoPliku(nazwaPliku);
                 printf("Konczenie pracy...\n");
@@ -48,7 +56,7 @@ int main(int argc, char* argv[]) {
             default:
                 printf("Nieznana opcja. Sprobuj ponownie.\n");
         }
-    } while (wybor != 4);
+    } while (wybor != 6);
 
     return 0;
 }

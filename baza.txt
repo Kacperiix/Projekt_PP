@@ -1,1 +1,4 @@
 Geralt Wied«min wojownik 100 100 0
+Cezary elf cos 10 10 0
+Adam wojownik cos 50 30 0
+Beata cos cos 5 100 0

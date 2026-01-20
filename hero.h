@@ -28,5 +28,7 @@ void wyswietlListe();
 void usunBohatera();
 void zapiszDoPliku(const char* nazwaPliku);
 void wczytajZPliku(const char* nazwaPliku);
+void sortujPoImieniu();
+void sortujPoPoziomie();
 
 #endif
